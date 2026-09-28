@@ -1,0 +1,17 @@
+# Local editor and operating-system files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Local logs and packet captures
+*.log
+*.pcap
+*.pcapng
