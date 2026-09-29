@@ -1,0 +1,267 @@
+┌──(kali㉿kali)-[~]
+└─$ dnsenum -h                                   
+dnsenum VERSION:1.3.1
+Usage: dnsenum [Options] <domain>
+[Options]:
+Note: If no -f tag supplied will default to /usr/share/dnsenum/dns.txt or
+the dns.txt file in the same directory as dnsenum
+GENERAL OPTIONS:
+  --dnsserver   <server>
+                        Use this DNS server for A, NS and MX queries.
+  --enum                Shortcut option equivalent to --threads 5 -s 15 -w.
+  -h, --help            Print this help message.
+  --noreverse           Skip the reverse lookup operations.
+  --nocolor             Disable ANSIColor output.
+  --private             Show and save private ips at the end of the file domain_ips.txt.
+  --subfile <file>      Write all valid subdomains to this file.
+  -t, --timeout <value> The tcp and udp timeout values in seconds (default: 10s).
+  --threads <value>     The number of threads that will perform different queries.
+  -v, --verbose         Be verbose: show all the progress and all the error messages.
+GOOGLE SCRAPING OPTIONS:
+  -p, --pages <value>   The number of google search pages to process when scraping names,
+                        the default is 5 pages, the -s switch must be specified.
+  -s, --scrap <value>   The maximum number of subdomains that will be scraped from Google (default 15).
+BRUTE FORCE OPTIONS:
+  -f, --file <file>     Read subdomains from this file to perform brute force. (Takes priority over default dns.txt)
+  -u, --update  <a|g|r|z>
+                        Update the file specified with the -f switch with valid subdomains.
+        a (all)         Update using all results.
+        g               Update using only google scraping results.
+        r               Update using only reverse lookup results.
+        z               Update using only zonetransfer results.
+  -r, --recursion       Recursion on subdomains, brute force all discovered subdomains that have an NS record.
+WHOIS NETRANGE OPTIONS:
+  -d, --delay <value>   The maximum value of seconds to wait between whois queries, the value is defined randomly, default: 3s.
+  -w, --whois           Perform the whois queries on c class network ranges.
+                         **Warning**: this can generate very large netranges and it will take lot of time to perform reverse lookups.
+REVERSE LOOKUP OPTIONS:
+  -e, --exclude <regexp>
+                        Exclude PTR records that match the regexp expression from reverse lookup results, useful on invalid hostnames.
+OUTPUT OPTIONS:
+  -o --output <file>    Output in XML format. Can be imported in MagicTree (www.gremwell.com)
+                                                                                                          
+┌──(kali㉿kali)-[~]
+└─$ dnsenum nptel.ac.in
+dnsenum VERSION:1.3.1
+
+-----   nptel.ac.in   -----
+
+
+Host's addresses:
+__________________                                                                                        
+                                                                                                          
+nptel.ac.in.                             1        IN    A        8.233.49.88                              
+
+                                                                                                          
+Name Servers:                                                                                             
+______________                                                                                            
+                                                                                                          
+ns-cloud-a1.googledomains.com.           39604    IN    A        216.239.32.106                           
+ns-cloud-a3.googledomains.com.           7307     IN    A        216.239.36.106
+ns-cloud-a4.googledomains.com.           11178    IN    A        216.239.38.106
+ns-cloud-a2.googledomains.com.           39596    IN    A        216.239.34.106
+
+                                                                                                          
+Mail (MX) Servers:                                                                                        
+___________________                                                                                       
+                                                                                                          
+aspmx3.googlemail.com.                   1        IN    A        108.177.125.26                           
+mailx1.iitm.ac.in.                       86400    IN    A        103.158.42.50
+alt2.aspmx.l.google.com.                 27       IN    A        108.177.125.26
+aspmx.l.google.com.                      1        IN    A        192.178.158.26
+alt1.aspmx.l.google.com.                 1        IN    A        172.253.158.26
+aspmx2.googlemail.com.                   1        IN    A        172.253.158.27
+
+                                                                                                          
+Trying Zone Transfers and getting Bind Versions:                                                          
+_________________________________________________                                                         
+                                                                                                          
+                                                                                                          
+Trying Zone Transfer for nptel.ac.in on ns-cloud-a1.googledomains.com ... 
+AXFR record query failed: REFUSED
+
+Trying Zone Transfer for nptel.ac.in on ns-cloud-a3.googledomains.com ... 
+AXFR record query failed: REFUSED
+
+Trying Zone Transfer for nptel.ac.in on ns-cloud-a4.googledomains.com ... 
+AXFR record query failed: REFUSED
+
+Trying Zone Transfer for nptel.ac.in on ns-cloud-a2.googledomains.com ... 
+AXFR record query failed: REFUSED
+
+                                                                                                          
+Brute forcing with /usr/share/dnsenum/dns.txt:                                                            
+_______________________________________________                                                           
+                                                                                                          
+archive.nptel.ac.in.                     454      IN    A        8.233.49.88                              
+beta.nptel.ac.in.                        1        IN    A        8.232.69.236
+dev.nptel.ac.in.                         7200     IN    A        103.158.43.163
+forums.nptel.ac.in.                      7200     IN    A        14.139.160.155
+
+
+
+staging.nptel.ac.in.                     300      IN    A        34.93.59.74
+www.nptel.ac.in.                         3317     IN    CNAME    nptel.ac.in.
+nptel.ac.in.                             259      IN    A        8.233.49.88
+
+                                                                                                                                                                                                                                            
+nptel.ac.in class C netranges:                                                                                                                                                                                                              
+_______________________________                                                                                                                                                                                                             
+                                                                                                                                                                                                                                            
+ 8.232.69.0/24                                                                                                                                                                                                                              
+ 8.233.49.0/24
+ 14.139.160.0/24
+ 34.93.59.0/24
+ 103.158.43.0/24
+
+                                                                                                                                                                                                                                            
+Performing reverse lookup on 1280 ip addresses:                                                                                                                                                                                             
+________________________________________________                                                                                                                                                                                            
+                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                            
+^C 
+
+┌──(kali㉿kali)-[~]
+└─$ dnsenum zonetransfer.me
+dnsenum VERSION:1.3.1
+
+-----   zonetransfer.me   -----                                                                                                                                                                                                             
+                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                            
+Host's addresses:                                                                                                                                                                                                                           
+__________________                                                                                                                                                                                                                          
+                                                                                                                                                                                                                                            
+zonetransfer.me.                         1        IN    A        5.196.105.14                                                                                                                                                               
+
+                                                                                                                                                                                                                                            
+Name Servers:                                                                                                                                                                                                                               
+______________                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                            
+nsztm1.digi.ninja.                       8564     IN    A        81.4.108.41                                                                                                                                                                
+nsztm2.digi.ninja.                       8564     IN    A        5.196.105.10
+
+                                                                                                                                                                                                                                            
+Mail (MX) Servers:                                                                                                                                                                                                                          
+___________________                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                            
+ALT2.ASPMX.L.GOOGLE.COM.                 1        IN    A        108.177.125.27                                                                                                                                                             
+ASPMX5.GOOGLEMAIL.COM.                   293      IN    A        192.179.26.26
+ASPMX4.GOOGLEMAIL.COM.                   293      IN    A        192.178.230.27
+ASPMX3.GOOGLEMAIL.COM.                   293      IN    A        108.177.125.27
+ASPMX.L.GOOGLE.COM.                      1        IN    A        192.178.158.26
+ASPMX2.GOOGLEMAIL.COM.                   1        IN    A        172.253.158.26
+ALT1.ASPMX.L.GOOGLE.COM.                 1        IN    A        172.253.158.26
+
+                                                                                                                                                                                                                                            
+Trying Zone Transfers and getting Bind Versions:                                                                                                                                                                                            
+_________________________________________________                                                                                                                                                                                           
+                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                            
+Trying Zone Transfer for zonetransfer.me on nsztm1.digi.ninja ... 
+zonetransfer.me.                         7200     IN    SOA               (
+zonetransfer.me.                         7200     IN    DNSKEY            (
+zonetransfer.me.                         301      IN    TXT               (
+zonetransfer.me.                         7200     IN    MX                0
+zonetransfer.me.                         7200     IN    MX               10
+zonetransfer.me.                         7200     IN    MX               10
+zonetransfer.me.                         7200     IN    MX               20
+zonetransfer.me.                         7200     IN    MX               20
+zonetransfer.me.                         7200     IN    MX               20
+zonetransfer.me.                         7200     IN    MX               20
+zonetransfer.me.                         7200     IN    A        5.196.105.14
+zonetransfer.me.                         7200     IN    NS       nsztm1.digi.ninja.
+zonetransfer.me.                         7200     IN    NS       nsztm2.digi.ninja.
+zonetransfer.me.                         7200     IN    CERT              (
+zonetransfer.me.                         300      IN    HINFO        "Casio
+_acme-challenge.zonetransfer.me.         301      IN    TXT               (
+_sip._tcp.zonetransfer.me.               14000    IN    SRV               0
+14.105.196.5.IN-ADDR.ARPA.zonetransfer.me. 7200     IN    PTR      www.zonetransfer.me.
+asfdbauthdns.zonetransfer.me.            7900     IN    AFSDB             1
+asfdbbox.zonetransfer.me.                7200     IN    A         127.0.0.1
+asfdbvolume.zonetransfer.me.             7800     IN    AFSDB             1
+canberra-office.zonetransfer.me.         7200     IN    A        202.14.81.230
+cmdexec.zonetransfer.me.                 300      IN    TXT              ";
+contact.zonetransfer.me.                 2592000  IN    TXT               (
+dc-office.zonetransfer.me.               7200     IN    A        143.228.181.132
+deadbeef.zonetransfer.me.                7201     IN    AAAA     dead:beaf::
+dr.zonetransfer.me.                      300      IN    LOC              53
+DZC.zonetransfer.me.                     7200     IN    TXT         AbCdEfG
+email.zonetransfer.me.                   2222     IN    NAPTR             (
+email.zonetransfer.me.                   7200     IN    A        74.125.206.26
+Hello.zonetransfer.me.                   7200     IN    TXT             "Hi
+home.zonetransfer.me.                    7200     IN    A         127.0.0.1
+Info.zonetransfer.me.                    7200     IN    TXT               (
+internal.zonetransfer.me.                300      IN    NS       intns1.zonetransfer.me.
+internal.zonetransfer.me.                300      IN    NS       intns2.zonetransfer.me.
+intns1.zonetransfer.me.                  300      IN    A        81.4.108.41
+intns2.zonetransfer.me.                  300      IN    A        5.196.105.10
+office.zonetransfer.me.                  7200     IN    A        4.23.39.254
+ipv6actnow.org.zonetransfer.me.          7200     IN    AAAA     2001:67c:2e8:11::c100:1332
+owa.zonetransfer.me.                     7200     IN    A        207.46.197.32
+robinwood.zonetransfer.me.               302      IN    TXT          "Robin
+rp.zonetransfer.me.                      321      IN    RP                (
+sip.zonetransfer.me.                     3333     IN    NAPTR             (
+sqli.zonetransfer.me.                    300      IN    TXT              "'
+sshock.zonetransfer.me.                  7200     IN    TXT             "()
+staging.zonetransfer.me.                 7200     IN    CNAME    www.sydneyoperahouse.com.
+alltcpportsopen.firewall.test.zonetransfer.me. 301      IN    A         127.0.0.1
+testing.zonetransfer.me.                 301      IN    CNAME    www.zonetransfer.me.
+vpn.zonetransfer.me.                     4000     IN    A        174.36.59.154
+www.zonetransfer.me.                     7200     IN    A        5.196.105.14
+xss.zonetransfer.me.                     300      IN    TXT      "'><script>alert('Boo')</script>"
+
+Trying Zone Transfer for zonetransfer.me on nsztm2.digi.ninja ... 
+zonetransfer.me.                         7200     IN    SOA               (
+zonetransfer.me.                         7200     IN    DNSKEY            (
+zonetransfer.me.                         301      IN    TXT               (
+zonetransfer.me.                         7200     IN    MX                0
+zonetransfer.me.                         7200     IN    MX               10
+zonetransfer.me.                         7200     IN    MX               10
+zonetransfer.me.                         7200     IN    MX               20
+zonetransfer.me.                         7200     IN    MX               20
+zonetransfer.me.                         7200     IN    MX               20
+zonetransfer.me.                         7200     IN    MX               20
+zonetransfer.me.                         7200     IN    A        5.196.105.14
+zonetransfer.me.                         7200     IN    NS       nsztm1.digi.ninja.
+zonetransfer.me.                         7200     IN    NS       nsztm2.digi.ninja.
+zonetransfer.me.                         7200     IN    CERT              (
+zonetransfer.me.                         300      IN    HINFO        "Casio
+_acme-challenge.zonetransfer.me.         301      IN    TXT               (
+_sip._tcp.zonetransfer.me.               14000    IN    SRV               0
+14.105.196.5.IN-ADDR.ARPA.zonetransfer.me. 7200     IN    PTR      www.zonetransfer.me.
+asfdbauthdns.zonetransfer.me.            7900     IN    AFSDB             1
+asfdbbox.zonetransfer.me.                7200     IN    A         127.0.0.1
+asfdbvolume.zonetransfer.me.             7800     IN    AFSDB             1
+canberra-office.zonetransfer.me.         7200     IN    A        202.14.81.230
+cmdexec.zonetransfer.me.                 300      IN    TXT              ";
+contact.zonetransfer.me.                 2592000  IN    TXT               (
+dc-office.zonetransfer.me.               7200     IN    A        143.228.181.132
+deadbeef.zonetransfer.me.                7201     IN    AAAA     dead:beaf::
+dr.zonetransfer.me.                      300      IN    LOC              53
+DZC.zonetransfer.me.                     7200     IN    TXT         AbCdEfG
+email.zonetransfer.me.                   2222     IN    NAPTR             (
+email.zonetransfer.me.                   7200     IN    A        74.125.206.26
+Hello.zonetransfer.me.                   7200     IN    TXT             "Hi
+home.zonetransfer.me.                    7200     IN    A         127.0.0.1
+Info.zonetransfer.me.                    7200     IN    TXT               (
+internal.zonetransfer.me.                300      IN    NS       intns1.zonetransfer.me.
+internal.zonetransfer.me.                300      IN    NS       intns2.zonetransfer.me.
+intns1.zonetransfer.me.                  300      IN    A        81.4.108.41
+intns2.zonetransfer.me.                  300      IN    A        5.196.105.10
+office.zonetransfer.me.                  7200     IN    A        4.23.39.254
+ipv6actnow.org.zonetransfer.me.          7200     IN    AAAA     2001:67c:2e8:11::c100:1332
+owa.zonetransfer.me.                     7200     IN    A        207.46.197.32
+robinwood.zonetransfer.me.               302      IN    TXT          "Robin
+rp.zonetransfer.me.                      321      IN    RP                (
+sip.zonetransfer.me.                     3333     IN    NAPTR             (
+sqli.zonetransfer.me.                    300      IN    TXT              "'
+sshock.zonetransfer.me.                  7200     IN    TXT             "()
+staging.zonetransfer.me.                 7200     IN    CNAME    www.sydneyoperahouse.com.
+alltcpportsopen.firewall.test.zonetransfer.me. 301      IN    A         127.0.0.1
+testing.zonetransfer.me.                 301      IN    CNAME    www.zonetransfer.me.
+vpn.zonetransfer.me.                     4000     IN    A        174.36.59.154
+www.zonetransfer.me.                     7200     IN    A        5.196.105.14
+xss.zonetransfer.me.                     300      IN    TXT      "'><script>alert('Boo')</script>"
+

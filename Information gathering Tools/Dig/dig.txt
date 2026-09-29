@@ -1,0 +1,307 @@
+┌──(kali㉿kali)-[~]
+└─$ dig -h           
+Usage:  dig [@global-server] [domain] [q-type] [q-class] {q-opt}
+            {global-d-opt} host [@local-server] {local-d-opt}
+            [ host [@local-server] {local-d-opt} [...]]
+Where:  domain    is in the Domain Name System
+        q-class  is one of (in,hs,ch,...) [default: in]
+        q-type   is one of (a,any,mx,ns,soa,hinfo,axfr,txt,...) [default:a]
+                 (Use ixfr=version for type ixfr)
+        q-opt    is one of:
+                 -4                  (use IPv4 query transport only)
+                 -6                  (use IPv6 query transport only)
+                 -b address[#port]   (bind to source address/port)
+                 -c class            (specify query class)
+                 -f filename         (batch mode)
+                 -k keyfile          (specify tsig key file)
+                 -m                  (enable memory usage debugging)
+                 -p port             (specify port number)
+                 -q name             (specify query name)
+                 -r                  (do not read ~/.digrc)
+                 -t type             (specify query type)
+                 -u                  (display times in usec instead of msec)
+                 -x dot-notation     (shortcut for reverse lookups)
+                 -y [hmac:]name:key  (specify named base64 tsig key)
+        d-opt    is of the form +keyword[=value], where keyword is:
+                 +[no]aaflag         (Set AA flag in query (+[no]aaflag))
+                 +[no]aaonly         (Set AA flag in query (+[no]aaflag))
+                 +[no]additional     (Control display of additional section)
+                 +[no]adflag         (Set AD flag in query (default on))
+                 +[no]all            (Set or clear all display flags)
+                 +[no]answer         (Control display of answer section)
+                 +[no]authority      (Control display of authority section)
+                 +[no]badcookie      (Retry BADCOOKIE responses)
+                 +[no]besteffort     (Try to parse even illegal messages)
+                 +bufsize[=###]      (Set EDNS0 Max UDP packet size)
+                 +[no]cdflag         (Set checking disabled flag in query)
+                 +[no]class          (Control display of class in records)
+                 +[no]cmd            (Control display of command line -
+                                      global option)
+                 +[no]coflag         (Set compact denial of existence ok flag)
+                                      in query)
+                 +[no]comments       (Control display of packet header
+                                      and section name comments)
+                 +[no]cookie         (Add a COOKIE option to the request)
+                 +[no]crypto         (Control display of cryptographic
+                                      fields in records)
+                 +[no]defname        (Use search list (+[no]search))
+                 +[no]dns64prefix    (Get the DNS64 prefixes from ipv4only.arpa)
+                 +[no]dnssec         (Request DNSSEC records)
+                 +domain=###         (Set default domainname)
+                 +[no]edns[=###]     (Set EDNS version) [0]
+                 +ednsflags=###      (Set undefined EDNS flag bits)
+                 +[no]ednsnegotiation (Set EDNS version negotiation)
+                 +ednsopt=###[:value] (Send specified EDNS option)
+                 +noednsopt          (Clear list of +ednsopt options)
+                 +[no]expandaaaa     (Expand AAAA records)
+                 +[no]expire         (Request time to expire)
+                 +[no]fail           (Don't try next server on SERVFAIL)
+                 +[no]header-only    (Send query without a question section)
+                 +[no]https[=###]    (DNS-over-HTTPS mode) [/]
+                 +[no]https-get      (Use GET instead of default POST method
+                                      while using HTTPS)
+                 +[no]http-plain[=###] (DNS over plain HTTP mode) [/]
+                 +[no]http-plain-get (Use GET instead of default POST method
+                                      while using plain HTTP)
+                 +[no]identify       (ID responders in short answers)
+                 +[no]idn            (convert international domain names)
+                 +[no]ignore         (Don't revert to TCP for TC responses.)
+                 +[no]keepalive      (Request EDNS TCP keepalive)
+                 +[no]keepopen       (Keep the TCP socket open between queries)
+                 +[no]multiline      (Print records in an expanded format)
+                 +ndots=###          (Set search NDOTS value)
+                 +[no]nsid           (Request Name Server ID)
+                 +[no]nssearch       (Search all authoritative nameservers)
+                 +[no]onesoa         (AXFR prints only one soa record)
+                 +[no]opcode=###     (Set the opcode of the request)
+                 +padding=###        (Set padding block size [0])
+                 +[no]proxy[=src_addr[#src_port]-dst_addr[#dst_port]]
+                                     (Add PROXYv2 headers to the queries. If
+                                      addresses are omitted, LOCAL PROXYv2
+                                      headers are added)
+                 +[no]proxy-plain[=src_addr[#src_port]-dst_addr[#dst_port]]
+                                     (The same as'+[no]proxy', but send PROXYv2
+                                      headers ahead of any encryption if an
+                                      encrypted transport is used)
+                 +qid=###            (Specify the query ID to use when sending
+                                      queries)
+                 +[no]qr             (Print question before sending)
+                 +[no]question       (Control display of question section)
+                 +[no]raflag         (Set RA flag in query (+[no]raflag))
+                 +[no]rdflag         (Recursive mode (+[no]recurse))
+                 +[no]recurse        (Recursive mode (+[no]rdflag))
+                 +retry=###          (Set number of UDP retries) [2]
+                 +[no]rrcomments     (Control display of per-record comments)
+                 +[no]search         (Set whether to use searchlist)
+                 +[no]short          (Display nothing except short
+                                      form of answers - global option)
+                 +[no]showbadcookie  (Show BADCOOKIE message)
+                 +[no]showbadvers    (Show BADVERS message)
+                 +[no]showsearch     (Search with intermediate results)
+                 +[no]split=##       (Split hex/base64 fields into chunks)
+                 +[no]stats          (Control display of statistics)
+                 +subnet=addr        (Set edns-client-subnet option)
+                 +[no]tcflag         (Set TC flag in query (+[no]tcflag))
+                 +[no]tcp            (TCP mode (+[no]vc))
+                 +timeout=###        (Set query timeout) [5]
+                 +[no]tls            (DNS-over-TLS mode)
+                 +[no]tls-ca[=file]  (Enable remote server's TLS certificate
+                                      validation)
+                 +[no]tls-hostname=hostname (Explicitly set the expected TLS
+                                      hostname)
+                 +[no]tls-certfile=file (Load client TLS certificate chain from
+                                      file)
+                 +[no]tls-keyfile=file (Load client TLS private key from file)
+                 +[no]trace          (Trace delegation down from root [implies
+                                      +dnssec])
+                 +tries=###          (Set number of UDP attempts) [3]
+                 +[no]ttlid          (Control display of ttls in records)
+                 +[no]ttlunits       (Display TTLs in human-readable units)
+                 +[no]unknownformat  (Print RDATA in RFC 3597 "unknown" format)
+                 +[no]vc             (TCP mode (+[no]tcp))
+                 +[no]yaml           (Present the results as YAML)
+                 +[no]zflag          (Set Z flag in query)
+        global d-opts and servers (before host name) affect all queries.
+        local d-opts and servers (after host name) affect only that lookup.
+        -h                           (print help and exit)
+        -v                           (print version and exit)
+                                                                                                          
+┌──(kali㉿kali)-[~]
+└─$ dig nptel.ac.in
+
+; <<>> DiG 9.20.27-2-Debian <<>> nptel.ac.in
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 41517
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; QUESTION SECTION:
+;nptel.ac.in.                   IN      A
+
+;; ANSWER SECTION:
+nptel.ac.in.            1       IN      A       8.233.49.88
+
+;; Query time: 155 msec
+;; SERVER: 192.168.31.1#53(192.168.31.1) (UDP)
+;; WHEN: Tue Sep 29 23:53:32 IST 2026
+;; MSG SIZE  rcvd: 56
+
+                                                                                                          
+┌──(kali㉿kali)-[~]
+└─$ dig nptel.ac.in +short
+8.233.49.88
+                                                                                                          
+┌──(kali㉿kali)-[~]
+└─$ dig nptel.ac.in -t ns
+
+; <<>> DiG 9.20.27-2-Debian <<>> nptel.ac.in -t ns
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 34681
+;; flags: qr rd ra; QUERY: 1, ANSWER: 4, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; QUESTION SECTION:
+;nptel.ac.in.                   IN      NS
+
+;; ANSWER SECTION:
+nptel.ac.in.            21600   IN      NS      ns-cloud-a4.googledomains.com.
+nptel.ac.in.            21600   IN      NS      ns-cloud-a3.googledomains.com.
+nptel.ac.in.            21600   IN      NS      ns-cloud-a2.googledomains.com.
+nptel.ac.in.            21600   IN      NS      ns-cloud-a1.googledomains.com.
+
+;; Query time: 199 msec
+;; SERVER: 192.168.31.1#53(192.168.31.1) (UDP)
+;; WHEN: Tue Sep 29 23:55:19 IST 2026
+;; MSG SIZE  rcvd: 161
+
+                                                                                                          
+┌──(kali㉿kali)-[~]
+└─$ dig nptel.ac.in -t ns +short
+ns-cloud-a4.googledomains.com.
+ns-cloud-a1.googledomains.com.
+ns-cloud-a2.googledomains.com.
+ns-cloud-a3.googledomains.com.
+                                                                                                          
+┌──(kali㉿kali)-[~]
+└─$ dig nptel.ac.in -t mx       
+
+; <<>> DiG 9.20.27-2-Debian <<>> nptel.ac.in -t mx
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 41466
+;; flags: qr rd ra; QUERY: 1, ANSWER: 6, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; QUESTION SECTION:
+;nptel.ac.in.                   IN      MX
+
+;; ANSWER SECTION:
+nptel.ac.in.            7200    IN      MX      20 alt2.aspmx.l.google.com.
+nptel.ac.in.            7200    IN      MX      10 aspmx.l.google.com.
+nptel.ac.in.            7200    IN      MX      30 aspmx3.googlemail.com.
+nptel.ac.in.            7200    IN      MX      30 aspmx2.googlemail.com.
+nptel.ac.in.            7200    IN      MX      10 mailx1.iitm.ac.in.
+nptel.ac.in.            7200    IN      MX      20 alt1.aspmx.l.google.com.
+
+;; Query time: 2990 msec
+;; SERVER: 192.168.31.1#53(192.168.31.1) (UDP)
+;; WHEN: Tue Sep 29 23:55:54 IST 2026
+;; MSG SIZE  rcvd: 201
+
+                                                                                                          
+┌──(kali㉿kali)-[~]
+└─$ dig zonetransfer.me -t ns
+
+; <<>> DiG 9.20.27-2-Debian <<>> zonetransfer.me -t ns
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 3603
+;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; QUESTION SECTION:
+;zonetransfer.me.               IN      NS
+
+;; ANSWER SECTION:
+zonetransfer.me.        1       IN      NS      nsztm1.digi.ninja.
+zonetransfer.me.        1       IN      NS      nsztm2.digi.ninja.
+
+;; Query time: 167 msec
+;; SERVER: 192.168.31.1#53(192.168.31.1) (UDP)
+;; WHEN: Tue Sep 29 23:57:04 IST 2026
+;; MSG SIZE  rcvd: 96
+
+                                                                                                          
+┌──(kali㉿kali)-[~]
+└─$ dig zonetransfer.me -t ns +short
+nsztm1.digi.ninja.
+nsztm2.digi.ninja.
+                                                                                                          
+┌──(kali㉿kali)-[~]
+└─$ dig axfr zonetransfer.me @nsztm1.digi.ninja 
+
+; <<>> DiG 9.20.27-2-Debian <<>> axfr zonetransfer.me @nsztm1.digi.ninja
+; (1 server found)
+;; global options: +cmd
+zonetransfer.me.        7200    IN      SOA     nsztm1.digi.ninja. robin.digi.ninja. 2019100801 172800 900 1209600 3600
+zonetransfer.me.        7200    IN      DNSKEY  256 3 7 AwEAAapoL+InQBYx2oi3dI424+dEDFgnVW0cOINfCY3jLrngZxBsEur8 ByhMOQsxoIOYu/7b3c8tj2BwlQquqxZe79QHSW78fK7D+bP/8AosnBG5 K5gJXEvphEtJ9x8/X0Y971XaW9lLmtJ6h4AXsrbgTr2g9KOiPSIbvDPM W8qLMaQkTm89hvPc+NuzrOEOPNhoXs/iPM+SQzrvTBfr6y0w2yPtYYdW I1kN76OQBxh0xjIdlyT0QKiohKq2bybPROJO7K3NlDc8oaOZoXH5/RfL DQzxzXyYSV8fLwimUeulo7YA11I/AHQ7DsUsFu2S2vxGCyR8nmx9gYbN 4sBvTF2i5eM=
+zonetransfer.me.        301     IN      TXT     "google-site-verification=tyP28J7JAUHA9fw2sHXMgcCC0I6XBmmoVi04VlMewxA"
+zonetransfer.me.        7200    IN      MX      0 ASPMX.L.GOOGLE.COM.
+zonetransfer.me.        7200    IN      MX      10 ALT1.ASPMX.L.GOOGLE.COM.
+zonetransfer.me.        7200    IN      MX      10 ALT2.ASPMX.L.GOOGLE.COM.
+zonetransfer.me.        7200    IN      MX      20 ASPMX2.GOOGLEMAIL.COM.
+zonetransfer.me.        7200    IN      MX      20 ASPMX3.GOOGLEMAIL.COM.
+zonetransfer.me.        7200    IN      MX      20 ASPMX4.GOOGLEMAIL.COM.
+zonetransfer.me.        7200    IN      MX      20 ASPMX5.GOOGLEMAIL.COM.
+zonetransfer.me.        7200    IN      A       5.196.105.14
+zonetransfer.me.        7200    IN      NS      nsztm1.digi.ninja.
+zonetransfer.me.        7200    IN      NS      nsztm2.digi.ninja.
+zonetransfer.me.        7200    IN      CERT    PKIX 0 0 MIIDvTCCAqUCFHh5BGzOrlYrXo5h90ipm0aDUEz9MA0GCSqGSIb3DQEB CwUAMIGaMQswCQYDVQQGEwJHQjEYMBYGA1UECAwPU291dGggWW9ya3No aXJlMRIwEAYDVQQHDAlTaGVmZmllbGQxEjAQBgNVBAoMCURpZ2luaW5q YTEQMA4GA1UECwwHSGFja2luZzEYMBYGA1UEAwwPem9uZXRyYW5zZmVy Lm1lMR0wGwYJKoZIhvcNAQkBFg56dG1AZGlnaS5uaW5qYTAeFw0yNTA3 MDIxMzU1MTNaFw0yNjA3MDIxMzU1MTNaMIGaMQswCQYDVQQGEwJHQjEY MBYGA1UECAwPU291dGggWW9ya3NoaXJlMRIwEAYDVQQHDAlTaGVmZmll bGQxEjAQBgNVBAoMCURpZ2luaW5qYTEQMA4GA1UECwwHSGFja2luZzEY MBYGA1UEAwwPem9uZXRyYW5zZmVyLm1lMR0wGwYJKoZIhvcNAQkBFg56 dG1AZGlnaS5uaW5qYTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC ggEBALzYVM9WlBqOKU1lmnKJkKdIEZOhkscHQktEJORXCismSWV3Ffbs Lw7D3sfCc0h9ecZglsYvFUmEM0I0noYtuHPAlF2+FotVuoFrYuMYrEQo Zs4kuORIEx8pwHMZQUSM6KwVVLIB/FE956GfovgxGxWs33QaTKATAVCh D9KTLf6wVh/eC+0GI6mbvGvjqZFmmV/SYmmkdqEBWB7q3+SByfVrUohC A2GO30dwk6vUBtIj+J+i4SzKzLXIvFEfbCirMPQvdflgwPbjwp+cWG7o UBvfQZfZbaTp+9+V8FoBl0f8fGj/Mae1n0rSV5hnuXot8d3PAoAWQtW3 HJUv1nEboAMCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAXop6ftpV2/r7 tkXqFCsMwub7ZBd12U14nsBon+X7K5Nr6obrVAtnWO+XwD8x2UgvYIQB uRLK9LOX6VYoiWMVrItIN8KRSsin5eJe4tzewsNGrVtkVbbKULViCeBt DgmImk8rkZeWU1uNOsq0t/wd3GUZe2CM9DpKVhPFhc9Uq3pYbAsidYlp SApuuj8ka3L+VruzJVwveyKTUkWAsN1iSv7BGgEF0039WW3IEv1ZP81c AdWFy1fx+tuteM6Iz5xkx1tp0/eLtb39cnKFQnrs8itDG2j3yBc3CClY mw4NNU2nODN4COt7uzXBez6iIFSNqQjVyFyomtPn4ae0cYRHEw==
+zonetransfer.me.        300     IN      HINFO   "Casio fx-700G" "Windows XP"
+_acme-challenge.zonetransfer.me. 301 IN TXT     "6Oa05hbUJ9xSsvYy7pApQvwCUSSGgxvrbdizjePEsZI"
+_sip._tcp.zonetransfer.me. 14000 IN     SRV     0 0 5060 www.zonetransfer.me.
+14.105.196.5.IN-ADDR.ARPA.zonetransfer.me. 7200 IN PTR www.zonetransfer.me.
+asfdbauthdns.zonetransfer.me. 7900 IN   AFSDB   1 asfdbbox.zonetransfer.me.
+asfdbbox.zonetransfer.me. 7200  IN      A       127.0.0.1
+asfdbvolume.zonetransfer.me. 7800 IN    AFSDB   1 asfdbbox.zonetransfer.me.
+canberra-office.zonetransfer.me. 7200 IN A      202.14.81.230
+cmdexec.zonetransfer.me. 300    IN      TXT     "; ls"
+contact.zonetransfer.me. 2592000 IN     TXT     "Remember to call or email Pippa on +44 123 4567890 or pippa@zonetransfer.me when making DNS changes"
+dc-office.zonetransfer.me. 7200 IN      A       143.228.181.132
+deadbeef.zonetransfer.me. 7201  IN      AAAA    dead:beaf::
+dr.zonetransfer.me.     300     IN      LOC     53 20 56.558 N 1 38 33.526 W 0.00m 1m 10000m 10m
+DZC.zonetransfer.me.    7200    IN      TXT     "AbCdEfG"
+email.zonetransfer.me.  2222    IN      NAPTR   1 1 "P" "E2U+email" "" email.zonetransfer.me.zonetransfer.me.
+email.zonetransfer.me.  7200    IN      A       74.125.206.26
+Hello.zonetransfer.me.  7200    IN      TXT     "Hi to Josh and all his class"
+home.zonetransfer.me.   7200    IN      A       127.0.0.1
+Info.zonetransfer.me.   7200    IN      TXT     "ZoneTransfer.me service provided by Robin Wood - robin@digi.ninja. See http://digi.ninja/projects/zonetransferme.php for more information."
+internal.zonetransfer.me. 300   IN      NS      intns1.zonetransfer.me.
+internal.zonetransfer.me. 300   IN      NS      intns2.zonetransfer.me.
+intns1.zonetransfer.me. 300     IN      A       81.4.108.41
+intns2.zonetransfer.me. 300     IN      A       5.196.105.10
+office.zonetransfer.me. 7200    IN      A       4.23.39.254
+ipv6actnow.org.zonetransfer.me. 7200 IN AAAA    2001:67c:2e8:11::c100:1332
+owa.zonetransfer.me.    7200    IN      A       207.46.197.32
+robinwood.zonetransfer.me. 302  IN      TXT     "Robin Wood"
+rp.zonetransfer.me.     321     IN      RP      robin.zonetransfer.me. robinwood.zonetransfer.me.
+sip.zonetransfer.me.    3333    IN      NAPTR   2 3 "P" "E2U+sip" "!^.*$!sip:customer-service@zonetransfer.me!" .
+sqli.zonetransfer.me.   300     IN      TXT     "' or 1=1 --"
+sshock.zonetransfer.me. 7200    IN      TXT     "() { :]}; echo ShellShocked"
+staging.zonetransfer.me. 7200   IN      CNAME   www.sydneyoperahouse.com.
+alltcpportsopen.firewall.test.zonetransfer.me. 301 IN A 127.0.0.1
+testing.zonetransfer.me. 301    IN      CNAME   www.zonetransfer.me.
+vpn.zonetransfer.me.    4000    IN      A       174.36.59.154
+www.zonetransfer.me.    7200    IN      A       5.196.105.14
+xss.zonetransfer.me.    300     IN      TXT     "'><script>alert('Boo')</script>"
+zonetransfer.me.        7200    IN      SOA     nsztm1.digi.ninja. robin.digi.ninja. 2019100801 172800 900 1209600 3600
+;; Query time: 208 msec
+;; SERVER: 81.4.108.41#53(nsztm1.digi.ninja) (TCP)
+;; WHEN: Tue Sep 29 23:58:33 IST 2026
+;; XFR size: 52 records (messages 1, bytes 3339)
