@@ -8,6 +8,7 @@ Hands-on cybersecurity exercises, investigation notes, scan reports, and defensi
 | --- | --- | --- |
 | [`Nmap/`](Nmap/README.md) | Authorized-lab network service and vulnerability-indicator assessment | [Nmap project README](Nmap/README.md) |
 | [`brute-force-investigation/`](brute-force-investigation/README.md) | Windows Event Viewer investigation of repeated failed logins | [Investigation README](brute-force-investigation/README.md) |
+| [`Information gathering Tools/`](Information%20gathering%20Tools/README.md) | Beginner-friendly DNS lookup and enumeration references | [Information gathering tools guide](Information%20gathering%20Tools/README.md) |
 
 Each project folder has its own README. Subfolders also include a README when they contain a distinct type of material, so you can navigate directly to the relevant report, findings, remediation notes, or evidence.
 
