@@ -1,59 +1,111 @@
-# `dnsenum`: DNS Enumeration
+# `dnsenum`: DNS enumeration examples from lab output
 
-`dnsenum` collects DNS information for a domain. Depending on its options and version, it can look up common records, try subdomain names from a wordlist, request zone transfers, and perform reverse lookups. These actions generate traffic, so use the tool only within an authorized assessment.
+`dnsenum` is a DNS reconnaissance utility that can gather host addresses, nameservers, mail servers, and subdomain data. In the lab it was used against `nptel.ac.in` and `zonetransfer.me`.
 
-## Install
-
-On Kali Linux or Debian:
+## 1. Help output
 
 ```bash
-sudo apt update
-sudo apt install dnsenum
+dnsenum -h
 ```
 
-Check the installed version and available options with:
+This shows the main options, including:
+- `--dnsserver`
+- `--enum`
+- `--noreverse`
+- `--threads`
+- `-f, --file`
+- `--whois`
+- `-o --output`
+
+A key part of the output is that `dnsenum` can perform a zone transfer and brute-force subdomain discovery.
+
+## 2. Query against `nptel.ac.in`
 
 ```bash
-dnsenum --help
+dnsenum nptel.ac.in
 ```
 
-## Run a scoped enumeration
+The result included:
 
-Use a domain from your own lab or an assessment scope that explicitly permits DNS enumeration:
+```text
+Host's addresses:
+nptel.ac.in.                             1        IN    A        8.233.49.88
+
+Name Servers:
+ns-cloud-a1.googledomains.com.           39604    IN    A        216.239.32.106
+ns-cloud-a3.googledomains.com.           7307     IN    A        216.239.36.106
+ns-cloud-a4.googledomains.com.           11178    IN    A        216.239.38.106
+ns-cloud-a2.googledomains.com.           39596    IN    A        216.239.34.106
+
+Mail (MX) Servers:
+aspmx3.googlemail.com.                   1        IN    A        108.177.125.26
+mailx1.iitm.ac.in.                       86400    IN    A        103.158.42.50
+...
+```
+
+The DNS transfer attempt then showed:
+
+```text
+Trying Zone Transfer for nptel.ac.in on ns-cloud-a1.googledomains.com ...
+AXFR record query failed: REFUSED
+```
+
+The same result repeated for all nameservers, showing the domain is not permitting zone transfer.
+
+The brute-force section then reported possible subdomains such as:
+
+```text
+archive.nptel.ac.in.                     454      IN    A        8.233.49.88
+beta.nptel.ac.in.                        1        IN    A        8.232.69.236
+dev.nptel.ac.in.                         7200     IN    A        103.158.43.163
+forums.nptel.ac.in.                      7200     IN    A        14.139.160.155
+staging.nptel.ac.in.                     300      IN    A        34.93.59.74
+www.nptel.ac.in.                         3317     IN    CNAME    nptel.ac.in.
+```
+
+These are important enumeration findings, but they are not proof of vulnerability by themselves.
+
+## 3. Query against `zonetransfer.me`
 
 ```bash
-dnsenum --noreverse --nocolor --timeout 3 --threads 2 <authorized-domain>
+dnsenum zonetransfer.me
 ```
 
-Replace `<authorized-domain>` with the permitted domain. The options above skip reverse lookups, disable terminal colors, set a three-second timeout, and limit concurrency to two threads. The tool may still try other enabled checks, including subdomain discovery and zone-transfer requests.
+This produced a much more revealing result:
 
-For less activity, query one DNS record with `host` or `dig` instead. See the [host guide](../Host/host.md) and [dig guide](../Dig/dig.md).
+```text
+Host's addresses:
+zonetransfer.me.                         1        IN    A        5.196.105.14
 
-## Understand the sections
+Name Servers:
+nsztm1.digi.ninja.                       8564     IN    A        81.4.108.41
+nsztm2.digi.ninja.                       8564     IN    A        5.196.105.10
+```
 
-Names and headings vary slightly by `dnsenum` version. Common results include:
+The zone transfer section then produced a large amount of DNS data:
 
-- **Host addresses:** address records (usually IPv4/A records) for the requested domain.
-- **Name servers:** NS records that identify servers responsible for DNS answers.
-- **Mail servers:** MX records and their priorities. A lower MX priority number is preferred.
-- **Zone-transfer results:** whether a name server accepted an AXFR request. `REFUSED` means it denied the request; a successful transfer can expose many DNS records.
-- **Brute-force results:** names found by checking words from a dictionary. A discovered subdomain is not, by itself, a vulnerability.
-- **Reverse lookups:** PTR queries for IP addresses. These can be numerous and may take time, which is why `--noreverse` is useful for a smaller run.
+```text
+Trying Zone Transfer for zonetransfer.me on nsztm1.digi.ninja ...
+zonetransfer.me.                         7200     IN    SOA               (
+zonetransfer.me.                         7200     IN    DNSKEY            (
+zonetransfer.me.                         301      IN    TXT               (
+zonetransfer.me.                         7200     IN    MX                0
+...
+14.105.196.5.IN-ADDR.ARPA.zonetransfer.me. 7200     IN    PTR      www.zonetransfer.me.
+canberra-office.zonetransfer.me.         7200     IN    A        202.14.81.230
+home.zonetransfer.me.                    7200     IN    A        127.0.0.1
+office.zonetransfer.me.                  7200     IN    A        4.23.39.254
+vpn.zonetransfer.me.                     4000     IN    A        174.36.59.154
+xss.zonetransfer.me.                     300      IN    TXT      "'><script>alert('Boo')</script>"
+```
 
-DNS data can be stale, incomplete, or shared across hosting providers. Confirm important findings with the system owner and current authoritative data.
+This is a clear example of an exposed DNS zone. The data included internal-looking hosts, a PTR record, a TXT record, and other details that would normally be kept private.
 
-## Options to know
+## 4. Interpretation
 
-- `--noreverse`: skip reverse DNS lookups.
-- `--threads <number>`: control concurrent queries; keep this low for a small lab run.
-- `-t, --timeout <seconds>`: set DNS query timeouts.
-- `--dnsserver <server>`: choose the DNS server used for A, NS, and MX queries.
-- `-f <wordlist>`: choose a subdomain wordlist. Wordlist checks create additional queries.
-- `--subfile <file>`: save discovered subdomains to a file.
-- `--nocolor`: disable colored output, useful for logs.
+The lab findings show two patterns:
 
-Read `dnsenum --help` for options supported by your installed version. Avoid broad reverse lookups and large wordlists unless they are in the written scope.
+- `nptel.ac.in` refused AXFR, so basic reconnaissance succeeded but no transfer was allowed.
+- `zonetransfer.me` allowed zone transfer, exposing a large set of DNS records.
 
-## Safety
-
-Only enumerate domains you own or have explicit permission to assess. Do not treat a zone-transfer denial as proof that every DNS setting is secure, and do not publish records that could expose internal or personal information.
+This is why `dnsenum` is useful for DNS reconnaissance, but it must be used only against authorized targets.

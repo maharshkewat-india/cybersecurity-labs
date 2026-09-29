@@ -1,84 +1,146 @@
-# `dig`: DNS Queries and Answers
+# `dig`: DNS query examples from lab output
 
-`dig` (Domain Information Groper) sends DNS queries and displays the response sections. Use it when you need to inspect a particular record type or understand more than a short lookup result.
+`dig` is a more detailed DNS query tool than `host`. It shows the request, response status, answer section, and query metadata. In the lab, `dig` was used to inspect A, NS, MX, and AXFR results.
 
-## Install
-
-On Kali Linux or Debian:
+## 1. Help output
 
 ```bash
-sudo apt update
-sudo apt install bind9-dnsutils
+dig -h
 ```
 
-## Basic usage
+This prints `dig` usage and available options, including record types and query modifiers.
+
+## 2. A record query for `nptel.ac.in`
 
 ```bash
-dig example.com A
+dig nptel.ac.in
 ```
 
-The final argument is the record type. `A` requests an IPv4 address. The answer may change over time; example output in this guide uses documentation-only values.
-
-Common record queries:
-
-```bash
-dig example.com AAAA
-dig example.com MX
-dig example.com NS
-dig example.com TXT
-```
-
-Use `+short` to print only the answer values:
-
-```bash
-dig example.com A +short
-```
-
-## Read the response
-
-In the full response, start with `status` and `ANSWER SECTION`:
+Key output:
 
 ```text
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR
+; <<>> DiG 9.20.27-2-Debian <<>> nptel.ac.in
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
 ;; ANSWER SECTION:
-example.com.  300  IN  A  203.0.113.10
+nptel.ac.in.            1       IN      A       8.233.49.88
 ```
 
-`NOERROR` means the DNS query completed successfully; it does not guarantee that a web server is available. In an answer row, the fields show the queried name, cache lifetime (TTL), record class, type, and value. `203.0.113.10` is reserved for documentation and is not a real target.
+This confirms:
+- the query succeeded (`NOERROR`)
+- the A record for `nptel.ac.in` is `8.233.49.88`
 
-Other response statuses include `NXDOMAIN` (the name does not exist) and `SERVFAIL` (the server could not complete the lookup). An empty answer can also mean that the requested record type is not configured.
-
-## Ask a specific resolver
+## 3. Short output
 
 ```bash
-dig @1.1.1.1 example.com A
+dig nptel.ac.in +short
 ```
 
-The `@` prefix selects the DNS resolver. Without it, `dig` uses the resolver configured on your machine.
+Output:
 
-## Reverse lookup
+```text
+8.233.49.88
+```
+
+This is useful when only the value is needed, without the full DNS response header.
+
+## 4. NS record query
 
 ```bash
-dig -x 203.0.113.10 +short
+dig nptel.ac.in -t ns
 ```
 
-`-x` requests a PTR record for an IP address. Reverse DNS records are optional, so no answer does not necessarily mean there is a problem.
+Output includes:
 
-## Zone-transfer check
+```text
+;; ANSWER SECTION:
+nptel.ac.in.            21600   IN      NS      ns-cloud-a4.googledomains.com.
+nptel.ac.in.            21600   IN      NS      ns-cloud-a3.googledomains.com.
+nptel.ac.in.            21600   IN      NS      ns-cloud-a2.googledomains.com.
+nptel.ac.in.            21600   IN      NS      ns-cloud-a1.googledomains.com.
+```
 
-AXFR requests can disclose a domain's DNS zone when a server allows them. Run this only against a domain and name server that you own or have written permission to test:
+This shows the four nameservers delegated for the domain.
 
 ```bash
-dig @<authoritative-name-server> <authorized-domain> AXFR
+dig nptel.ac.in -t ns +short
 ```
 
-Replace both placeholders with authorized lab values. A transfer containing many records indicates that the server allowed the request; coordinate with the owner before drawing conclusions or sharing the data. `REFUSED` means the server denied the request.
+Output:
 
-## Useful options
+```text
+ns-cloud-a4.googledomains.com.
+ns-cloud-a1.googledomains.com.
+ns-cloud-a2.googledomains.com.
+ns-cloud-a3.googledomains.com.
+```
 
-- `+short`: show answer values only.
-- `+noall +answer`: show only the answer section.
-- `+trace`: follow DNS delegation from the root servers; this generates multiple queries.
-- `-t MX`: choose a record type (equivalent to placing `MX` after the domain).
+## 5. MX record query
 
-DNS lookups are one part of reconnaissance, not a vulnerability verdict. Limit testing to systems you own or are explicitly authorized to assess.
+```bash
+dig nptel.ac.in -t mx
+```
+
+The output showed six MX records:
+
+```text
+nptel.ac.in.            7200    IN      MX      20 alt2.aspmx.l.google.com.
+nptel.ac.in.            7200    IN      MX      10 aspmx.l.google.com.
+nptel.ac.in.            7200    IN      MX      30 aspmx3.googlemail.com.
+nptel.ac.in.            7200    IN      MX      30 aspmx2.googlemail.com.
+nptel.ac.in.            7200    IN      MX      10 mailx1.iitm.ac.in.
+nptel.ac.in.            7200    IN      MX      20 alt1.aspmx.l.google.com.
+```
+
+This helps identify the mail servers and priority values: lower preference numbers are preferred.
+
+## 6. AXFR zone transfer against `zonetransfer.me`
+
+```bash
+dig axfr zonetransfer.me @nsztm1.digi.ninja
+```
+
+This returned a full zone transfer. Key output:
+
+```text
+zonetransfer.me.        7200    IN      SOA     nsztm1.digi.ninja. robin.digi.ninja. 2019100801 172800 900 1209600 3600
+zonetransfer.me.        7200    IN      NS      nsztm1.digi.ninja.
+zonetransfer.me.        7200    IN      NS      nsztm2.digi.ninja.
+zonetransfer.me.        7200    IN      A       5.196.105.14
+zonetransfer.me.        301     IN      TXT     "google-site-verification=..."
+...
+```
+
+The response included many records, such as `MX`, `TXT`, `PTR`, `AFSDB`, and internal hostnames like:
+
+```text
+canberra-office.zonetransfer.me.         7200     IN     A      202.14.81.230
+home.zonetransfer.me.                     7200     IN     A      127.0.0.1
+vpn.zonetransfer.me.                      4000     IN     A      174.36.59.154
+xss.zonetransfer.me.                      300      IN     TXT    "'><script>alert('Boo')</script>"
+```
+
+This shows why AXFR is considered a major DNS exposure when a server allows it.
+
+## 7. Nameserver lookup for `zonetransfer.me`
+
+```bash
+dig zonetransfer.me -t ns
+```
+
+Output:
+
+```text
+zonetransfer.me.        1       IN      NS      nsztm1.digi.ninja.
+zonetransfer.me.        1       IN      NS      nsztm2.digi.ninja.
+```
+
+## Key takeaway
+
+`dig` is valuable because it exposes:
+- the query status (`NOERROR`, `REFUSED`, etc.)
+- the full answer section
+- record types such as `A`, `NS`, and `MX`
+- dangerous misconfigurations like successful `AXFR` transfers
+
+In this lab, `nptel.ac.in` responded normally while `zonetransfer.me` showed a zone transfer that exposed lots of DNS data.

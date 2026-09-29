@@ -1,69 +1,147 @@
-# `host`: Quick DNS Lookups
+# `host`: DNS lookup examples from lab output
 
-The `host` command looks up DNS records for a domain or hostname. It is useful for quick checks when you want an answer without the full DNS response details.
+The `host` command is a simple DNS utility used to query domains and display address, nameserver, and mail-server information. In the lab, it was used against `nptel.ac.in`, `iitkgp.ac.in`, and `zonetransfer.me`.
 
-## Install
-
-On Kali Linux or Debian:
+## 1. Help output
 
 ```bash
-sudo apt update
-sudo apt install bind9-dnsutils
+host -h
 ```
 
-## Basic usage
+This does not show normal help output because `host` recognizes `-V` or a plain command without an option. The command actually prints usage when the invalid flag is used:
+
+```text
+host: illegal option -- h
+Usage: host [-aCdilrTvVw] [-c class] [-N ndots] [-t type] [-W time]
+```
+
+This tells us the tool expects a domain name or a valid record type, not `-h` as help.
+
+## 2. Basic A record lookup
 
 ```bash
-host example.com
+host nptel.ac.in
 ```
 
-This usually displays the domain's IPv4 address and any mail servers returned by DNS. The exact records can change over time.
+Output:
 
-Ask for one record type with `-t`:
+```text
+nptel.ac.in has address 8.233.49.88
+nptel.ac.in mail is handled by 30 aspmx3.googlemail.com.
+nptel.ac.in mail is handled by 20 alt1.aspmx.l.google.com.
+nptel.ac.in mail is handled by 30 aspmx2.googlemail.com.
+nptel.ac.in mail is handled by 10 aspmx.l.google.com.
+nptel.ac.in mail is handled by 10 mailx1.iitm.ac.in.
+nptel.ac.in mail is handled by 20 alt2.aspmx.l.google.com.
+```
+
+This shows:
+- `A` record: `8.233.49.88`
+- `MX` records: Google Mail servers and `mailx1.iitm.ac.in`
+
+## 3. Name server lookup
 
 ```bash
-host -t A example.com
-host -t AAAA example.com
-host -t MX example.com
-host -t NS example.com
-host -t TXT example.com
+host -t ns nptel.ac.in
 ```
 
-`A` is an IPv4 address, `AAAA` is an IPv6 address, `MX` lists mail servers, `NS` lists name servers, and `TXT` returns text records.
+Output:
 
-To look up a reverse DNS name for an IP address:
+```text
+nptel.ac.in name server ns-cloud-a2.googledomains.com.
+nptel.ac.in name server ns-cloud-a4.googledomains.com.
+nptel.ac.in name server ns-cloud-a1.googledomains.com.
+nptel.ac.in name server ns-cloud-a3.googledomains.com.
+```
+
+This confirms the authoritative nameservers used by the domain.
+
+## 4. Zone transfer check
 
 ```bash
-host 203.0.113.10
+host -l nptel.ac.in ns-cloud-a3.googledomains.com
 ```
 
-`203.0.113.10` is an example address reserved for documentation, so this example may not return a hostname.
+Output:
 
-## Choose a DNS server
+```text
+Using domain server:
+Name: ns-cloud-a3.googledomains.com
+Address: 216.239.36.106#53
+Aliases:
 
-You can ask a particular DNS server to answer the query:
+Host nptel.ac.in not found: 5(REFUSED)
+; Transfer failed.
+```
+
+`REFUSED` means the DNS server did not allow the zone transfer. This is a normal defensive configuration for many production domains.
+
+## 5. Query on another domain
 
 ```bash
-host example.com 1.1.1.1
+host iitkgp.ac.in
 ```
 
-The server address goes after the domain. This can help compare answers from different resolvers.
+Output:
 
-## Zone-transfer check
+```text
+iitkgp.ac.in has address 203.110.243.180
+iitkgp.ac.in mail is handled by 5 mx1.iitkgp.ac.in.
+iitkgp.ac.in mail is handled by 5 mx2.iitkgp.ac.in.
+```
 
-An AXFR request asks an authoritative DNS server to return a zone's records. Use it only when you own the domain or have written permission to test it:
+This is a straightforward A/MX lookup, showing another domain's IP and mail servers.
+
+## 6. Zone transfer test on `zonetransfer.me`
 
 ```bash
-host -l <authorized-domain> <authoritative-name-server>
+host zonetransfer.me
 ```
 
-Replace both placeholders with values from your authorized lab. A response such as `REFUSED` means the server denied the request; it does not by itself indicate a security issue. A successful transfer can disclose DNS records and should be reported to the system owner.
+Output:
 
-## Common results
+```text
+zonetransfer.me has address 5.196.105.14
+zonetransfer.me mail is handled by 10 ALT1.ASPMX.L.GOOGLE.COM.
+zonetransfer.me mail is handled by 0 ASPMX.L.GOOGLE.COM.
+zonetransfer.me mail is handled by 20 ASPMX2.GOOGLEMAIL.COM.
+zonetransfer.me mail is handled by 20 ASPMX5.GOOGLEMAIL.COM.
+zonetransfer.me mail is handled by 10 ALT2.ASPMX.L.GOOGLE.COM.
+zonetransfer.me mail is handled by 20 ASPMX4.GOOGLEMAIL.COM.
+zonetransfer.me mail is handled by 20 ASPMX3.GOOGLEMAIL.COM.
+```
 
-- `has address` or `mail is handled by`: DNS returned the requested record.
-- `NXDOMAIN`: the queried name does not exist in DNS, or the name was typed incorrectly.
-- `REFUSED`: the server understood the query but will not answer it.
-- Timeout: the server did not answer in time; network conditions or filtering may be responsible.
+```bash
+host -t ns zonetransfer.me
+```
 
-DNS answers are observations, not proof that a service is reachable or vulnerable. Test only systems you own or are explicitly authorized to assess.
+Output:
+
+```text
+zonetransfer.me name server nsztm2.digi.ninja.
+zonetransfer.me name server nsztm1.digi.ninja.
+```
+
+```bash
+host -l zonetransfer.me nsztm1.digi.ninja.
+```
+
+Output included many records such as:
+
+```text
+;; communications error to 81.4.108.41#53: timed out
+...
+zonetransfer.me has address 5.196.105.14
+zonetransfer.me name server nsztm1.digi.ninja.
+zonetransfer.me name server nsztm2.digi.ninja.
+14.105.196.5.IN-ADDR.ARPA.zonetransfer.me domain name pointer www.zonetransfer.me.
+asfdbbox.zonetransfer.me has address 127.0.0.1
+canberra-office.zonetransfer.me has address 202.14.81.230
+...
+```
+
+This demonstrates that a DNS zone transfer can expose internal-looking records and subdomains if the server is misconfigured. In a lab, this is a useful example of insecure DNS exposure.
+
+## Key takeaway
+
+`host` is useful for quick reconnaissance: A records, MX records, nameservers, and AXFR attempts. For the observed results, the key lesson is that `REFUSED` denies transfer, while a successful transfer can reveal a large amount of zone data.
