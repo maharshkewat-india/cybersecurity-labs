@@ -1,0 +1,77 @@
+# ICMP Echo Sweep Examples — Metasploitable Target (10.0.2.4)
+
+## 1. Basic ICMP Echo Ping Scan
+
+```
+┌──(kali㉿kali)-[~]
+└─$ nmap -PE 10.0.2.4
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-09-30 22:30 +0530
+Nmap scan report for 10.0.2.4
+Host is up (0.00076s latency).
+Not shown: 997 filtered tcp ports (no-response)
+PORT    STATE SERVICE
+135/tcp open  msrpc
+139/tcp open  netbios-ssn
+445/tcp open  microsoft-ds
+MAC Address: 08:00:27:9B:54:31 (Oracle VirtualBox virtual NIC)
+
+Nmap done: 1 IP address (1 host up) scanned in 5.66 seconds
+```
+
+**Explanation:** `-PE` sends ICMP Echo Request (type 8). Host responds with Echo Reply (type 0), confirming it's up. Nmap then discovers 3 open TCP ports (135, 139, 445).
+
+---
+
+## 2. Detailed ICMP Echo Scan with Packet Trace
+
+```
+┌──(kali㉿kali)-[~]
+└─$ nmap -PE -sn 10.0.2.4 --reason --packet-trace --disable-arp-ping
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-09-30 22:31 +0530
+SENT (0.0211s) ICMP [10.0.2.15 > 10.0.2.4 Echo request (type=8/code=0) id=27655 seq=0] IP [ttl=57 id=30307 iplen=28]
+RCVD (0.0231s) ICMP [10.0.2.4 > 10.0.2.15 Echo reply (type=0/code=0) id=27655 seq=0] IP [ttl=128 id=111 iplen=28]
+...
+Nmap scan report for 10.0.2.4
+Host is up, received echo-reply ttl 128 (0.0021s latency).
+MAC Address: 08:00:27:9B:54:31 (Oracle VirtualBox virtual NIC)
+Nmap done: 1 IP address (1 host up) scanned in 0.59 seconds
+```
+
+**Flags explained:**
+- `-PE` — Send ICMP Echo Request
+- `-sn` — Ping scan only (no port scan)
+- `--reason` — Show why host is marked up/down
+- `--packet-trace` — Show sent/received packets
+- `--disable-arp-ping` — Skip ARP ping, use ICMP only
+
+**Result:** Host is up, received echo-reply. TTL = 128 indicates Windows host.
+
+---
+
+## 3. Repeated ICMP Echo Scan (Timing Variation)
+
+```
+┌──(kali㉿kali)-[~]
+└─$ nmap -PE -sn 10.0.2.4 --reason --packet-trace --disable-arp-ping
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-09-30 22:33 +0530
+SENT (0.0190s) ICMP [10.0.2.15 > 10.0.2.4 Echo request (type=8/code=0) id=47764 seq=0] IP [ttl=52 id=5823 iplen=28]
+RCVD (0.0199s) ICMP [10.0.2.4 > 10.0.2.15 Echo reply (type=0/code=0) id=47764 seq=0] IP [ttl=128 id=202 iplen=28]
+...
+Nmap scan report for 10.0.2.4
+Host is up, received echo-reply ttl 128 (0.00096s latency).
+MAC Address: 08:00:27:9B:54:31 (Oracle VirtualBox virtual NIC)
+Nmap done: 1 IP address (1 host up) scanned in 0.56 seconds
+```
+
+**Note:** Slightly different TTL (52 vs 57) and timing due to network conditions, but consistent echo-reply confirms host availability.
+
+---
+
+## Key Takeaways
+
+| Observation | Meaning |
+|-------------|---------|
+| Echo request (type=8) → Echo reply (type=0) | Host is reachable and responds to ICMP |
+| TTL = 128 | Likely Windows OS |
+| MAC: 08:00:27:9B:54:31 | Oracle VirtualBox virtual NIC |
+| Open ports 135, 139, 445 | Windows SMB/RPC services — typical Metasploitable profile |

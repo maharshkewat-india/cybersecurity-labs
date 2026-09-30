@@ -1,0 +1,53 @@
+┌──(kali㉿kali)-[~]
+└─$ nmap -PE 10.0.2.4
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-09-30 22:30 +0530
+Nmap scan report for 10.0.2.4
+Host is up (0.00076s latency).
+Not shown: 997 filtered tcp ports (no-response)
+PORT    STATE SERVICE
+135/tcp open  msrpc
+139/tcp open  netbios-ssn
+445/tcp open  microsoft-ds
+MAC Address: 08:00:27:9B:54:31 (Oracle VirtualBox virtual NIC)
+
+Nmap done: 1 IP address (1 host up) scanned in 5.66 seconds
+               before disable the firewall                                                                                                    
+┌──(kali㉿kali)-[~]
+└─$ nmap -PE -sn 10.0.2.4 --reason --packet-trace --disable-arp-ping
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-09-30 22:31 +0530
+SENT (0.0211s) ICMP [10.0.2.15 > 10.0.2.4 Echo request (type=8/code=0) id=27655 seq=0] IP [ttl=57 id=30307 iplen=28
+RCVD (0.0231s) ICMP [10.0.2.4 > 10.0.2.15 Echo reply (type=0/code=0) id=27655 seq=0] IP [ttl=128 id=111 iplen=28 ]
+NSOCK INFO [0.0680s] nsock_iod_new2(): nsock_iod_new (IOD #1)
+NSOCK INFO [0.0690s] nsock_connect_udp(): UDP connection requested to 192.168.31.1:53 (IOD #1) EID 8
+NSOCK INFO [0.0690s] nsock_trace_handler_callback(): Callback: CONNECT SUCCESS for EID 8 [192.168.31.1:53]
+NSOCK INFO [0.0690s] nsock_read(): Read request from IOD #1 [192.168.31.1:53] (timeout: -1ms) EID 18
+NSOCK INFO [0.0690s] nsock_write(): Write request for 39 bytes to IOD #1 EID 27 [192.168.31.1:53]
+NSOCK INFO [0.0690s] nsock_trace_handler_callback(): Callback: WRITE SUCCESS for EID 27 [192.168.31.1:53]
+NSOCK INFO [0.0900s] nsock_trace_handler_callback(): Callback: READ SUCCESS for EID 18 [192.168.31.1:53] (39 bytes)
+NSOCK INFO [0.0900s] nsock_read(): Read request from IOD #1 [192.168.31.1:53] (timeout: -1ms) EID 34
+NSOCK INFO [0.5680s] nsock_iod_delete(): nsock_iod_delete (IOD #1)
+NSOCK INFO [0.5680s] nevent_delete(): nevent_delete on event #34 (type READ)
+Nmap scan report for 10.0.2.4
+Host is up, received echo-reply ttl 128 (0.0021s latency).
+MAC Address: 08:00:27:9B:54:31 (Oracle VirtualBox virtual NIC)
+Nmap done: 1 IP address (1 host up) scanned in 0.59 seconds
+                      after disable the firewall                                                                                             
+┌──(kali㉿kali)-[~]
+└─$ nmap -PE -sn 10.0.2.4 --reason --packet-trace --disable-arp-ping
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-09-30 22:33 +0530
+SENT (0.0190s) ICMP [10.0.2.15 > 10.0.2.4 Echo request (type=8/code=0) id=47764 seq=0] IP [ttl=52 id=5823 iplen=28 ]
+RCVD (0.0199s) ICMP [10.0.2.4 > 10.0.2.15 Echo reply (type=0/code=0) id=47764 seq=0] IP [ttl=128 id=202 iplen=28 ]
+NSOCK INFO [0.0420s] nsock_iod_new2(): nsock_iod_new (IOD #1)
+NSOCK INFO [0.0430s] nsock_connect_udp(): UDP connection requested to 192.168.31.1:53 (IOD #1) EID 8
+NSOCK INFO [0.0430s] nsock_trace_handler_callback(): Callback: CONNECT SUCCESS for EID 8 [192.168.31.1:53]
+NSOCK INFO [0.0430s] nsock_read(): Read request from IOD #1 [192.168.31.1:53] (timeout: -1ms) EID 18
+NSOCK INFO [0.0430s] nsock_write(): Write request for 39 bytes to IOD #1 EID 27 [192.168.31.1:53]
+NSOCK INFO [0.0430s] nsock_trace_handler_callback(): Callback: WRITE SUCCESS for EID 27 [192.168.31.1:53]
+NSOCK INFO [0.0640s] nsock_trace_handler_callback(): Callback: READ SUCCESS for EID 18 [192.168.31.1:53] (39 bytes): &............4.2.0.10.in-addr.arpa.....
+NSOCK INFO [0.0640s] nsock_read(): Read request from IOD #1 [192.168.31.1:53] (timeout: -1ms) EID 34
+NSOCK INFO [0.5450s] nsock_iod_delete(): nsock_iod_delete (IOD #1)
+NSOCK INFO [0.5450s] nevent_delete(): nevent_delete on event #34 (type READ)
+Nmap scan report for 10.0.2.4
+Host is up, received echo-reply ttl 128 (0.00096s latency).
+MAC Address: 08:00:27:9B:54:31 (Oracle VirtualBox virtual NIC)
+Nmap done: 1 IP address (1 host up) scanned in 0.56 seconds

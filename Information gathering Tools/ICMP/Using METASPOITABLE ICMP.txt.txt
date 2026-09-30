@@ -1,0 +1,161 @@
+┌──(kali㉿kali)-[~]
+└─$ ifconfig         
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.0.2.15  netmask 255.255.255.0  broadcast 10.0.2.255
+        inet6 fe80::a00:27ff:fe5b:9a10  prefixlen 64  scopeid 0x20<link>
+        ether 08:00:27:5b:9a:10  txqueuelen 1000  (Ethernet)
+        RX packets 1285  bytes 92689 (90.5 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 1281  bytes 86593 (84.5 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 8  bytes 480 (480.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 8  bytes 480 (480.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+                                                                                                                                                                                                                                           
+┌──(kali㉿kali)-[~]
+└─$ nmap -PE 10.0.2.3
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-09-30 21:54 +0530
+Nmap scan report for 10.0.2.3
+Host is up (0.00079s latency).
+Not shown: 977 closed tcp ports (reset)
+PORT     STATE SERVICE
+21/tcp   open  ftp
+22/tcp   open  ssh
+23/tcp   open  telnet
+25/tcp   open  smtp
+53/tcp   open  domain
+80/tcp   open  http
+111/tcp  open  rpcbind
+139/tcp  open  netbios-ssn
+445/tcp  open  microsoft-ds
+512/tcp  open  exec
+513/tcp  open  login
+514/tcp  open  shell
+1099/tcp open  rmiregistry
+1524/tcp open  ingreslock
+2049/tcp open  nfs
+2121/tcp open  ccproxy-ftp
+3306/tcp open  mysql
+5432/tcp open  postgresql
+5900/tcp open  vnc
+6000/tcp open  X11
+6667/tcp open  irc
+8009/tcp open  ajp13
+8180/tcp open  unknown
+MAC Address: 08:00:27:98:62:D2 (Oracle VirtualBox virtual NIC)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.72 seconds
+                                                                                                                                                                                                                                           
+┌──(kali㉿kali)-[~]
+└─$ SU -I
+SU: command not found
+                                                                                                                                                                                                                                           
+┌──(kali㉿kali)-[~]
+└─$ su -i                       
+su: invalid option -- 'i'
+Try 'su --help' for more information.
+                                                                                                                                                                                                                                           
+┌──(kali㉿kali)-[~]
+└─$ sudo su                     
+[sudo] password for kali: 
+┌──(root㉿kali)-[/home/kali]
+└─# nmap -PE 10.0.2.3    
+
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-09-30 21:57 +0530
+Nmap scan report for 10.0.2.3
+Host is up (0.00073s latency).
+Not shown: 977 closed tcp ports (reset)
+PORT     STATE SERVICE
+21/tcp   open  ftp
+22/tcp   open  ssh
+23/tcp   open  telnet
+25/tcp   open  smtp
+53/tcp   open  domain
+80/tcp   open  http
+111/tcp  open  rpcbind
+139/tcp  open  netbios-ssn
+445/tcp  open  microsoft-ds
+512/tcp  open  exec
+513/tcp  open  login
+514/tcp  open  shell
+1099/tcp open  rmiregistry
+1524/tcp open  ingreslock
+2049/tcp open  nfs
+2121/tcp open  ccproxy-ftp
+3306/tcp open  mysql
+5432/tcp open  postgresql
+5900/tcp open  vnc
+6000/tcp open  X11
+6667/tcp open  irc
+8009/tcp open  ajp13
+8180/tcp open  unknown
+MAC Address: 08:00:27:98:62:D2 (Oracle VirtualBox virtual NIC)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.89 seconds
+                                                                                                                                                                                                                                           
+┌──(root㉿kali)-[/home/kali]
+└─# nmap -PE -sn 10.0.2.3
+
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-09-30 22:07 +0530
+Nmap scan report for 10.0.2.3
+Host is up (0.00048s latency).
+MAC Address: 08:00:27:98:62:D2 (Oracle VirtualBox virtual NIC)
+Nmap done: 1 IP address (1 host up) scanned in 0.60 seconds
+                                                                                                                                                                                                                                           
+┌──(root㉿kali)-[/home/kali]
+└─# nmap -PE -sn 10.0.2.3 --reason 
+
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-09-30 22:07 +0530
+Nmap scan report for 10.0.2.3
+Host is up, received arp-response (0.0015s latency).
+MAC Address: 08:00:27:98:62:D2 (Oracle VirtualBox virtual NIC)
+Nmap done: 1 IP address (1 host up) scanned in 0.62 seconds
+                                                                                                                                                                                                                                           
+┌──(root㉿kali)-[/home/kali]
+└─# nmap -PE -sn 10.0.2.3 --reason --packet-trace
+
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-09-30 22:19 +0530
+SENT (0.0261s) ARP who-has 10.0.2.3 tell 10.0.2.15
+RCVD (0.0270s) ARP reply 10.0.2.3 is-at 08:00:27:98:62:D2
+NSOCK INFO [0.0680s] nsock_iod_new2(): nsock_iod_new (IOD #1)
+NSOCK INFO [0.0680s] nsock_connect_udp(): UDP connection requested to 192.168.31.1:53 (IOD #1) EID 8
+NSOCK INFO [0.0680s] nsock_trace_handler_callback(): Callback: CONNECT SUCCESS for EID 8 [192.168.31.1:53]
+NSOCK INFO [0.0680s] nsock_read(): Read request from IOD #1 [192.168.31.1:53] (timeout: -1ms) EID 18
+NSOCK INFO [0.0680s] nsock_write(): Write request for 39 bytes to IOD #1 EID 27 [192.168.31.1:53]
+NSOCK INFO [0.0680s] nsock_trace_handler_callback(): Callback: WRITE SUCCESS for EID 27 [192.168.31.1:53]
+NSOCK INFO [0.0920s] nsock_trace_handler_callback(): Callback: READ SUCCESS for EID 18 [192.168.31.1:53] (39 bytes): .............3.2.0.10.in-addr.arpa.....
+NSOCK INFO [0.0920s] nsock_read(): Read request from IOD #1 [192.168.31.1:53] (timeout: -1ms) EID 34
+NSOCK INFO [0.7880s] nsock_iod_delete(): nsock_iod_delete (IOD #1)
+NSOCK INFO [0.7880s] nevent_delete(): nevent_delete on event #34 (type READ)
+Nmap scan report for 10.0.2.3
+Host is up, received arp-response (0.00095s latency).
+MAC Address: 08:00:27:98:62:D2 (Oracle VirtualBox virtual NIC)
+Nmap done: 1 IP address (1 host up) scanned in 0.81 seconds
+                                                                                                                                                                                             
+┌──(root㉿kali)-[/home/kali]
+└─# nmap -PE -sn 10.0.2.3 --reason --packet-trace --disable-arp-ping
+
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-09-30 22:20 +0530
+SENT (0.0154s) ICMP [10.0.2.15 > 10.0.2.3 Echo request (type=8/code=0) id=22803 seq=0] IP [ttl=40 id=2797 iplen=28 ]
+RCVD (0.0274s) ICMP [10.0.2.3 > 10.0.2.15 Echo reply (type=0/code=0) id=22803 seq=0] IP [ttl=64 id=5214 iplen=28 ]
+NSOCK INFO [0.0630s] nsock_iod_new2(): nsock_iod_new (IOD #1)
+NSOCK INFO [0.0630s] nsock_connect_udp(): UDP connection requested to 192.168.31.1:53 (IOD #1) EID 8
+NSOCK INFO [0.0630s] nsock_trace_handler_callback(): Callback: CONNECT SUCCESS for EID 8 [192.168.31.1:53]
+NSOCK INFO [0.0630s] nsock_read(): Read request from IOD #1 [192.168.31.1:53] (timeout: -1ms) EID 18
+NSOCK INFO [0.0630s] nsock_write(): Write request for 39 bytes to IOD #1 EID 27 [192.168.31.1:53]
+NSOCK INFO [0.0630s] nsock_trace_handler_callback(): Callback: WRITE SUCCESS for EID 27 [192.168.31.1:53]
+NSOCK INFO [0.0890s] nsock_trace_handler_callback(): Callback: READ SUCCESS for EID 18 [192.168.31.1:53] (39 bytes): 4............3.2.0.10.in-addr.arpa.....
+NSOCK INFO [0.0890s] nsock_read(): Read request from IOD #1 [192.168.31.1:53] (timeout: -1ms) EID 34
+NSOCK INFO [0.5630s] nsock_iod_delete(): nsock_iod_delete (IOD #1)
+NSOCK INFO [0.5630s] nevent_delete(): nevent_delete on event #34 (type READ)
+Nmap scan report for 10.0.2.3
+Host is up, received echo-reply ttl 64 (0.012s latency).
+MAC Address: 08:00:27:98:62:D2 (Oracle VirtualBox virtual NIC)
+Nmap done: 1 IP address (1 host up) scanned in 0.58 seconds
