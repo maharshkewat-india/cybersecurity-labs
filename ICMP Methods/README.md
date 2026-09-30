@@ -6,9 +6,9 @@ This folder contains practical lab resources for practicing **ICMP-based informa
 
 | # | File | Description |
 |---|------|-------------|
-| 1 | `Using METASPOITABLE ICMP.txt.txt` | ICMP scanning examples against a Metasploitable target — demonstrates host discovery via ICMP and open port enumeration |
-| 2 | `non echo sweep in meta2.txt.txt` | Detailed ICMP Echo Request/Reply analysis with `--packet-trace` — shows why a host is marked up and how to read TTL for OS fingerprinting |
-| 3 | `using window 7.txt.txt` | ICMP scanning examples against a Windows 7 host — comparing Windows TTL (128) and service fingerprints |
+| 1 | `Using METASPOITABLE ICMP.txt` | ICMP scanning examples against a Metasploitable target — demonstrates host discovery via ICMP and open port enumeration |
+| 2 | `non echo sweep in meta2.txt` | Detailed ICMP Echo Request/Reply analysis with `--packet-trace` — shows why a host is marked up and how to read TTL for OS fingerprinting |
+| 3 | `using window 7.txt` | ICMP scanning examples against a Windows 7 host — comparing Windows TTL (128) and service fingerprints |
 | 4 | `using TCP & UDP sweep.txt` | Combined TCP/UDP sweep examples — port discovery using both protocol types |
 | 5 | `README.md` | This file — overview and guide for all ICMP lab resources |
 
